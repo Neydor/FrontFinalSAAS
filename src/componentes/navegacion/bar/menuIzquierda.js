@@ -21,8 +21,8 @@ export const MenuIzquierda = ({classes}) => (
                 <i className="material-icons">menu_book</i>
                 <ListItemText classes={{primary: classes.listItemText}} primary ="Lista Cursos" />
             </ListItem>
-            <ListItem component={Link} button to="/curso/paginador">
-                <i className="material-icons">EditSharpIcon</i>
+            <ListItem component={Link} button to="/curso/editar">
+            <EditSharp/>
                 <ListItemText classes={{primary: classes.listItemText}} primary ="Editar Curso"/>
             </ListItem>
         </List>
@@ -33,7 +33,7 @@ export const MenuIzquierda = ({classes}) => (
                  <ListItemText classes={{primary: classes.listItemText}} primary="Nueva sede"/>
             </ListItem>
             <ListItem component={Link} button  to="/sede/editar">
-                 <EditSharp/>
+            <EditSharp/>
                  <ListItemText classes={{primary: classes.listItemText}} primary="Editar Sede"/>
             </ListItem>
         </List>

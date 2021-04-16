@@ -9,23 +9,27 @@ import {
     Select, MenuItem
 } from '@material-ui/core';
 import style from '../Tool/Style';
-import { consultarSede,actualizarSede } from '../../actions/SedeAction';
+import { consultarSede, actualizarSede } from '../../actions/SedeAction';
 
 const ActualizarSede = (props) => {
+
+    var entradaId = "";
+
     const [sede, setSede] = useState({
-        id_sede:'',
+        id_sede: '',
         nombre_sede: '',
         estado: '',
         latitud: '',
         longitud: '',
         id_ciudad: '',
-        id_usuario:1,
+        id_usuario: 1,
         t001_usuarios_id_usuario: ''
     })
 
     useEffect(() => {
+        entradaId= prompt("Ingrese el ID de la sede que quiere editar:", "");
         console.log("Entra a useEffect")
-        consultarSede(2).then(response => {
+        consultarSede(entradaId).then(response => {
             console.log("Respuesta consulta Sede", response.data)
             // var respuesta = response.data;
             // respuesta.estado = String(respuesta.estado);
@@ -42,10 +46,10 @@ const ActualizarSede = (props) => {
         }))
     }
 
-    const subirCambiosSede =  e => {
+    const subirCambiosSede = e => {
         e.preventDefault();
-        
-        actualizarSede(sede.id_sede     ,sede).then(response => {
+
+        actualizarSede(entradaId, sede).then(response => {
             console.log('se edito exitosamente la sede', response);
             props.history.push("/");
         });

@@ -11,8 +11,10 @@ import { useStateValue } from "./contexto/store";
 import { obtenerUsuarioActual } from "./actions/UsuarioAction";
 import RutaSegura from "./componentes/navegacion/RutaSegura";
 import NuevoCurso from "./componentes/cursos/NuevoCurso";
+import PaginadorCurso from "./componentes/cursos/PaginadorCurso";
 import RegistrarSede from "./componentes/sedes/RegistrarSede";
 import ActualizarSede from "./componentes/sedes/ActualizarSede";
+import  ActualizarCursos  from "./componentes/cursos/ActualizarCursos";
 
 
 function App() {
@@ -74,8 +76,10 @@ function App() {
               <RutaSegura exact path="/" component={PerfilUsuario} />
 
               <RutaSegura exact path="/curso/nuevo" component={NuevoCurso} />
+              <RutaSegura exact path="/curso/editar" component={ActualizarCursos} />
               <RutaSegura exact path="/sede/nuevo" component={RegistrarSede} />
               <RutaSegura exact path="/sede/editar" component={ActualizarSede} />
+              <RutaSegura exact path="/curso/paginador" component={PaginadorCurso} />
 
             </Switch>
           </Grid>

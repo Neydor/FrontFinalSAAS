@@ -1,5 +1,8 @@
 import HttpCliente from '../servicios/HttpCliente';
+import axios from "axios";
 
+const instancia = axios.create();
+instancia.CancelToken = axios.CancelToken;
 
 export const guardarCurso = async (curso, imagen) => {
     const endPointCurso = '/cursos';
@@ -8,9 +11,9 @@ export const guardarCurso = async (curso, imagen) => {
 };
 
 
-export const paginacionCurso = (paginador) => {
+export const paginacionCurso = () => {
     return new Promise((resolve, eject) => {
-        HttpCliente.get('/cursos', paginador).then(response => {
+        HttpCliente.get('/cursos').then(response => {
             resolve(response);
         })
     })
@@ -18,17 +21,16 @@ export const paginacionCurso = (paginador) => {
 
 export const consultarCurso = (id) => {
     return new Promise((resolve, eject) => {
-      
-      instancia.get(`/cursos/:id_curso${id}`).then((response) => {
-        resolve(response);
-      });
+        instancia.get(`/cursos/${id}`).then((response) => {
+            resolve(response);
+        });
     });
-  }
-  export const actualizarCurso = (id, curso) => {
+}
+export const actualizarCurso = (id, curso) => {
     return new Promise((resolve, eject) => {
-      console.log("entro a actualizarCurso")
-      instancia.put(`/cursos/:id_curso${id}`, curso).then((response) => {
-        resolve(response);
-      })
+        console.log("entro a actualizarCurso")
+        instancia.put(`/cursos/${id}`, curso).then((response) => {
+            resolve(response);
+        })
     });
-  };
+};

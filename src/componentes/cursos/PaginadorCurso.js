@@ -1,122 +1,84 @@
-import React, { useState, useEffect } from "react";
-import { paginacionCurso } from "../../actions/CursoAction";
+import React, { useEffect, useState } from 'react';
 import {
-  TableContainer,
-  Paper,
-  TableHead,
-  TableBody,
+  Container,
+  Typography,
   Table,
-  TableRow,
+  TableBody,
+  TableHead,
+  TableRow, 
   TableCell,
-  TablePagination,
-  Hidden,
-  Grid,
-  TextField,
-} from "@material-ui/core";
-import ControlTyping from "../Tool/ControlTyping";
+TableContainer,
+Paper
+} from '@material-ui/core';
 
-const PaginadorCurso = () => {
+import { makeStyles } from '@material-ui/core/styles';
+import style from '../Tool/Style';
+import { paginacionCurso } from '../../actions/CursoAction';
 
-  const [textoBusquedaCurso, setTextoBusquedaCurso] = useState("");
-  const typingBuscadorTexto = ControlTyping(textoBusquedaCurso, 900);
+const useStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+});
+const ActualizarCursos = (props) => {
 
-  const [paginadorRequest, setPaginadorRequest] = useState();
-
-  const [paginadorResponse, setPaginadorResponse] = useState({
-    listaRecords: [],
-    totalRecords: 0,
-    numeroPaginas: 0,
-  });
+  const [cursos, setCursos] = useState([{
+    id_curso: '',
+    estado: '',
+    codigo_curso: '',
+    nombre_curso: '',
+    descripcion_curso: '',
+    creditos_curso: '',
+    categoria_curso: ''
+  }])
 
   useEffect(() => {
+    console.log("Entra a useEffect")
+    paginacionCurso().then(response => {
+      console.log("Respuesta consulta cursos", response.data)
+      // var respuesta = response.data;
+      // respuesta.estado = String(respuesta.estado);
+      // respuesta.id_ciudad = String(respuesta.id_ciudad);
+      setCursos(response.data)
+    })
+  }, [])
 
-    
-
-    const obtenerListaCurso = async () => {
-
-      const objetoPaginadorRequest = {
-      };
-
-      const response = await paginacionCurso(objetoPaginadorRequest);
-      console.log(response)
-      setPaginadorResponse(response.data);
-    };
-
-    obtenerListaCurso();
-  }, [paginadorRequest, typingBuscadorTexto]);
-
-  const cambiarPagina = (event, nuevaPagina) => {
-    setPaginadorRequest((anterior) => ({
-      ...anterior,
-      numeroPagina: parseInt(nuevaPagina),
-    }));
-  };
-
-  const cambiarCantidadRecords = (event) => {
-    setPaginadorRequest((anterior) => ({
-      ...anterior,
-      cantidadElementos: parseInt(event.target.value),
-      numeroPagina: 0,
-    }));
-  };
-
+  const classes = useStyles();
   return (
-    <div style={{padding:"10px", width:"100%"}}>
-      <Grid container style={{paddingTop:"20px", paddingBottom:"20px"}}>
-        <Grid item xs={12} sm={4} md={6}>
-            <TextField 
-              fullWidth
-              name="textoBusquedaCurso"
-              variant="outlined"
-              label="Busca tu curso"
-              onChange = {e => setTextoBusquedaCurso(e.target.value)}
-            />
-        </Grid>
-      </Grid>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell align="left">Cursos</TableCell>
-              <Hidden mdDown>
-                <TableCell align="left">Descripcion</TableCell>
-                <TableCell align="left">Fecha Publicacion</TableCell>
-                <TableCell align="left">Precio Original</TableCell>
-                <TableCell align="left">Precio Promocion</TableCell>
-              </Hidden>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {paginadorResponse.listaRecords.map((curso) => (
-              <TableRow key={curso.titulo}>
-            
-                <TableCell align="left">{curso.Titulo}</TableCell>
-
-                <Hidden mdDown>
-                    <TableCell align="left">{curso.Descripcion}</TableCell>
-                    <TableCell align="left">
-                    {new Date(curso.FechaPublicacion).toLocaleString()}
-                    </TableCell>
-                    <TableCell align="left">{curso.PrecioActual}</TableCell>
-                    <TableCell align="left">{curso.Promocion}</TableCell>
-                </Hidden>
-                
-            
+    <Container component="main" maxWidth="md" justify="center">
+      <div style={style.paper}>
+        <Typography component="h1" variant="h5">
+          Tabla de Cursos
+                </Typography>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} size="small" aria-label="a dense table">
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell align="right">Codigo</TableCell>
+                <TableCell align="right">Descripcion</TableCell>
+                <TableCell align="right">Creditos</TableCell>
+                <TableCell align="right">Categoria</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-        component="div"
-        rowsPerPageOptions={[5, 10, 25]}
-        count={paginadorResponse.totalRecords}
-        onChangePage={cambiarPagina}
-        onChangeRowsPerPage={cambiarCantidadRecords}
-        labelRowsPerPage="Cursos por pagina"
-      />
-    </div>
+            </TableHead>
+            <TableBody>
+              {cursos.map((row) => (
+                <TableRow>
+                  <TableCell component="th" scope="row">{row.id_curso}</TableCell>
+                  <TableCell component="th" scope="row">{row.nombre_curso}</TableCell>
+                  <TableCell component="th" scope="row">{row.codigo_curso}</TableCell>
+                  <TableCell align="right">{row.descripcion_curso}</TableCell>
+                  <TableCell align="right">{row.creditos_curso}</TableCell>
+                  <TableCell align="right">{row.categoria_curso}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div >
+    </Container >
   );
-};
+}
 
-export default PaginadorCurso;
+export default ActualizarCursos;

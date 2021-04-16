@@ -9,42 +9,45 @@ import {
     Select, MenuItem
 } from '@material-ui/core';
 import style from '../Tool/Style';
-import { consultarCurso,actualizarCurso } from '../../actions/CursoAction';
+import { actualizarCurso, consultarCurso } from '../../actions/CursoAction';
 
 const ActualizarCursos = (props) => {
+    var entradaId= "";
+
     const [curso, setCurso] = useState({
-        id_curso:'',
+        id_curso: '',
         estado: '',
-        codigo_curso:'',
+        codigo_curso: '',
         nombre_curso: '',
         descripcion_curso: '',
-        creditos_curso:'',
+        creditos_curso: '',
         categoria_curso: ''
     })
 
     useEffect(() => {
         console.log("Entra a useEffect")
-        consultarSede(2).then(response => {
+        entradaId= prompt("Ingrese el ID de la sede que quiere editar:", "");
+        consultarCurso(entradaId).then(response => {
             console.log("Respuesta consulta Sede", response.data)
             // var respuesta = response.data;
             // respuesta.estado = String(respuesta.estado);
             // respuesta.id_ciudad = String(respuesta.id_ciudad);
-            setSede(response.data[0])
+            setCurso(response.data[0])
         })
     }, [])
 
     const ingresarValoresMemoria = e => {
         const { name, value } = e.target;
-        setSede(anterior => ({
+        setCurso(anterior => ({
             ...anterior,
             [name]: value
         }))
     }
 
-    const subirCambiosCurso =  e => {
+    const subirCambiosCurso = e => {
         e.preventDefault();
-        
-        actualizarCurso(curso.id_curso     ,curso).then(response => {
+
+        actualizarCurso(entradaId, curso).then(response => {
             console.log('se edito exitosamente el curso', response);
             props.history.push("/");
         });
@@ -59,13 +62,13 @@ const ActualizarCursos = (props) => {
                 <form style={style.form}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
-                            <TextField name="descripcion_curso" value={curso.descripcion_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="estado" />
+                            <TextField name="descripcion_curso" value={curso.descripcion_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Descripción del curso" />
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <TextField name="codigo_curso" value={curso.codigo_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese el codigo del curso" />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <TextField name="nombre_curso" value={curso.nombre_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese el nombre del curso" />    
+                            <TextField name="nombre_curso" value={curso.nombre_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese el nombre del curso" />
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <InputLabel id="label-estado">Estado</InputLabel>
@@ -86,9 +89,20 @@ const ActualizarCursos = (props) => {
                         <Grid item xs={12} md={6}>
                             <TextField name="creditos_curso" value={curso.creditos_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese la cantidad de creditos" />
                         </Grid>
-
-                        <Grid item xs={12} md={6} style={style.esconder}>
-                            <TextField name="categoria_curso" value={curso.categoria_curso} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Elija una categoria" />
+                        <Grid item xs={12} md={6}>
+                            <InputLabel id="label-estado">Estado</InputLabel>
+                            <Select fullWidth
+                                labelId="label-estado"
+                                id="estado_select"
+                                value={curso.categoria_curso}
+                                name="categoria_curso"
+                                variant="filled"
+                                onChange={ingresarValoresMemoria}
+                                defaultValue=""
+                            >
+                                <MenuItem value={1}>Matematicas</MenuItem>
+                                <MenuItem value={2}>Programación</MenuItem>
+                            </Select>
                         </Grid>
 
                     </Grid>
