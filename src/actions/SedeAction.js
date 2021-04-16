@@ -14,34 +14,28 @@ export const registrarSede = (sede) => {
 };
 
 export const consultarSede = (id) => {
-    return new Promise((resolve, eject) => {
-        instancia.post('/Curso/:id_curso', id).then((response) => {
-          resolve(response);
-        });
-      });
-}
-export const actualizarSede = (sede, dispatch) => {
   return new Promise((resolve, eject) => {
-    HttpCliente.put("/sedes", sede)
-      .then((response) => {
-        dispatch({
-          type: "INICIAR_SESION",
-          sesion: response.data,
-          autenticado: true,
-        });
+    
+    instancia.get(`/sedes/${id}`).then((response) => {
+      resolve(response);
+    });
+  });
+}
 
-        resolve(response);
-      })
-      .catch((error) => {
-        resolve(error.response);
-      });
+
+export const actualizarSede = (id, sede) => {
+  return new Promise((resolve, eject) => {
+    console.log("entro a actualizarSede")
+    instancia.put(`/sedes/${id}`, sede).then((response) => {
+      resolve(response);
+    })
   });
 };
 
 
 export const allSedes = () => {
   return new Promise((resolve, eject) => {
-    HttpCliente.get("/sedes" ).then((response) => {
+    HttpCliente.get("/sedes").then((response) => {
       resolve(response);
     });
   });

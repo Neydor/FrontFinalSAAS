@@ -12,6 +12,7 @@ import { obtenerUsuarioActual } from "./actions/UsuarioAction";
 import RutaSegura from "./componentes/navegacion/RutaSegura";
 import NuevoCurso from "./componentes/cursos/NuevoCurso";
 import RegistrarSede from "./componentes/sedes/RegistrarSede";
+import ActualizarSede from "./componentes/sedes/ActualizarSede";
 
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
 
               <RutaSegura exact path="/curso/nuevo" component={NuevoCurso} />
               <RutaSegura exact path="/sede/nuevo" component={RegistrarSede} />
+              <RutaSegura exact path="/sede/editar" component={ActualizarSede} />
 
             </Switch>
           </Grid>

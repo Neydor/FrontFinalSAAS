@@ -1,62 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import {  Container,
+import {
+    Container,
     Typography,
     Grid,
     TextField,
     Button,
     InputLabel,
-    Select, MenuItem } from '@material-ui/core';
+    Select, MenuItem
+} from '@material-ui/core';
 import style from '../Tool/Style';
-import { consultarSede } from '../../actions/SedeAction';
+import { consultarSede,actualizarSede } from '../../actions/SedeAction';
 
-const RegistrarSede = (props) => {
+const ActualizarSede = (props) => {
     const [sede, setSede] = useState({
+        id_sede:'',
         nombre_sede: '',
         estado: '',
         latitud: '',
         longitud: '',
         id_ciudad: '',
-        id_usuario: 1,
+        id_usuario:1,
+        t001_usuarios_id_usuario: ''
     })
+
+    useEffect(() => {
+        console.log("Entra a useEffect")
+        consultarSede(2).then(response => {
+            console.log("Respuesta consulta Sede", response.data)
+            // var respuesta = response.data;
+            // respuesta.estado = String(respuesta.estado);
+            // respuesta.id_ciudad = String(respuesta.id_ciudad);
+            setSede(response.data[0])
+        })
+    }, [])
 
     const ingresarValoresMemoria = e => {
         const { name, value } = e.target;
         setSede(anterior => ({
             ...anterior,
             [name]: value
-            //NombreCompleto : 'vaxi drez'
         }))
     }
-    useEffect(()=>{
-        consultarSede(1).then(response => {
-            console.log("Respuesta consulta Sede",response)
-            setSede(response.data)
-        })
-        setSede()       
-      })
-    const registrarSedeBoton = e => {
-        e.preventDefault();
 
-        registrarSede(sede).then(response => {
-            console.log('se registro exitosamente la sede', response);
-            window.localStorage.setItem("token_seguridad", response.data.token);
+    const subirCambiosSede =  e => {
+        e.preventDefault();
+        
+        actualizarSede(sede.id_sede     ,sede).then(response => {
+            console.log('se edito exitosamente la sede', response);
             props.history.push("/");
         });
 
     }
-
     return (
         <Container component="main" maxWidth="md" justify="center">
             <div style={style.paper}>
                 <Typography component="h1" variant="h5">
-                    Registro de Sede
+                    Actualizar sede
                 </Typography>
                 <form style={style.form}>
                     <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
+                        <Grid item xs={12} md={6}>
                             <TextField name="longitud" value={sede.longitud} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese su longitud" />
                         </Grid>
-                        
+
                         <Grid item xs={12} md={6}>
                             <TextField name="latitud" value={sede.latitud} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese su latitud" />
                         </Grid>
@@ -69,6 +75,7 @@ const RegistrarSede = (props) => {
                                 name="id_ciudad"
                                 variant="filled"
                                 onChange={ingresarValoresMemoria}
+                                defaultValue=""
                             >
                                 <MenuItem value={1}>Tulua</MenuItem>
                                 <MenuItem value={2}>Cali</MenuItem>
@@ -86,6 +93,8 @@ const RegistrarSede = (props) => {
                                 name="estado"
                                 variant="filled"
                                 onChange={ingresarValoresMemoria}
+                                defaultValue=""
+
                             >
                                 <MenuItem value={1}>Válido</MenuItem>
                                 <MenuItem value={2}>Inválido</MenuItem>
@@ -94,16 +103,16 @@ const RegistrarSede = (props) => {
                         <Grid item xs={12} md={6}>
                             <TextField name="nombre_sede" value={sede.nombre_sede} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese nombre de la sede" />
                         </Grid>
-                        
+
                         <Grid item xs={12} md={6} style={style.esconder}>
-                            <TextField name="id_usuario" value={sede.id_usuario} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese su usuario" />
+                            <TextField name="t001_usuarios_id_usuario" value={sede.t001_usuarios_id_usuario} onChange={ingresarValoresMemoria} variant="filled" fullWidth label="Ingrese su usuario" />
                         </Grid>
 
                     </Grid>
                     <Grid container justify="center">
                         <Grid item xs={12} md={6}>
-                            <Button type="submit" onClick={registrarSedeBoton} fullWidth variant="contained" color="primary" size="large" style={style.submit}>
-                                Registrar
+                            <Button type="submit" onClick={subirCambiosSede} fullWidth variant="contained" color="primary" size="large" style={style.submit}>
+                                Actualizar
                             </Button>
                         </Grid>
                     </Grid>
@@ -113,4 +122,4 @@ const RegistrarSede = (props) => {
     );
 }
 
-export default RegistrarSede;
+export default ActualizarSede;
