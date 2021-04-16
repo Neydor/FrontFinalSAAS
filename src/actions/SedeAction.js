@@ -32,3 +32,10 @@ export const actualizarSede = (sede, dispatch) => {
 };
 
 
+export const allSedes = () => {
+  return new Promise((resolve, eject) => {
+    HttpCliente.get("/sedes" ).then((response) => {
+      resolve(response);
+    });
+  });
+};

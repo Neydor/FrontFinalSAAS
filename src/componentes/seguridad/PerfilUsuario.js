@@ -5,12 +5,8 @@ import {
   obtenerUsuarioActual,
   actualizarUsuario,
 } from "../../actions/UsuarioAction";
+import { allSedes } from "../../actions/SedeAction";
 import { useStateValue } from "../../contexto/store";
-import reactFoto from "../../logo.svg";
-import { v4 as uuidv4 } from "uuid";
-import ImageUploader from "react-images-upload";
-import { obtenerDataImagen } from "../../actions/ImagenAction";
-import univalleLogo from "../../assets/univalle.jpg";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Map, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -26,34 +22,22 @@ L.Icon.Default.mergeOptions({
   shadowUrl: iconShadow,
 });
 
-const PerfilUsuario = () => {
+const PerfilUsuario = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [usuario, setUsuario] = useState({
-    nombreCompleto: "",
-    email: "",
-    password: "",
-    confirmarPassword: "",
-    username: "",
-    imagenPerfil: null,
-    fotoUrl: "",
+  const [sedes, setSedes] = useState({
+    data:[],
+    lenght:0
   });
-
-  const ingresarValoresMemoria = (e) => {
-    const { name, value } = e.target;
-    setUsuario((anterior) => ({
-      ...anterior,
-      [name]: value,
-    }));
-  };
-
-  useEffect(() => {
-    setUsuario(sesionUsuario.usuario);
-    setUsuario((anterior) => ({
-      ...anterior,
-      fotoUrl: sesionUsuario.usuario.imagenPerfil,
-      imagenPerfil: null,
-    }));
-  }, []);
+  console.log(sedes);
+    
+  // useEffect(()=>{
+  //   allSedes().then(response => {
+  //     console.log('Se trajo todas las sedes',sedes);
+  //     setSedes(response.data);
+  //     console.log('Se trajo todas las sedes',sedes);
+  //     window.localStorage.setItem("token_seguridad", response.data.token);
+  //   });
+  // })
 
   const posicionTulua = [4.09098, -76.196281];
   const listaGasolinerasCoordenada = [
@@ -84,14 +68,14 @@ const PerfilUsuario = () => {
         <MapContainer
           style={styleMap}
           center={posicionTulua}
-          zoom={13}
+          zoom={9}
           scrollWheelZoom={false}
         >
           <TileLayer
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {listaGasolinerasCoordenada.map((cord) => (
+          {sedes.data.map((cord) => (
             <Marker position={[cord[0], cord[1]]}>
               <Popup minWidth={90}>
                 Estacion: Tales <br />
