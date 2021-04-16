@@ -1,194 +1,69 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {Container, Typography, Grid, TextField, Button} from '@material-ui/core';
 import style from '../Tool/Style';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import ImageUploader from 'react-images-upload';
-import {v4 as uuidv4} from 'uuid';
-import {obtenerDataImagen} from '../../actions/ImagenAction';
-import { guardarSede } from '../../actions/SedeAction';
-import { useStateValue } from '../../contexto/store';
+import {  registrarSede } from '../../actions/SedeAction';
 
-const NuevaSede = () => {
-    const [{sesionUsuario}, dispatch]  = useStateValue();
-    const [fechaSeleccionada, setFechaSeleccionada] = useState(new Date());
-
-    const [imagenCurso , setImagenCurso] = useState(null);
-
-    const [curso, setSede] = useState({
-        nombre : '',
-        descripcion : '',
-        ubicacion : '',
-    });
-
-    const resetearForm = () => {
-        setFechaSeleccionada(new Date());
-        setImagenCurso(null);
-        setSede({
-            nombre : '',
-            descripcion : '',
-            ubicacion : '',
-        })
-    }
+const RegistrarSede = () => {
+    const [sede, setSede] = useState({
+        nombre_sede : '',
+        estado : 0,
+        latitud : 0.0,
+        longitud : 0.0,
+        ciudad: 0,
+        usuario: 0,
+    })
 
     const ingresarValoresMemoria = e => {
-        const { name, value } = e.target;
-
-         setSede( (anterior) => ({
-             ...anterior,
-             [name] : value
-         })); 
-
+        const {name, value} = e.target;
+        setUsuario( anterior => ({
+            ...anterior,
+            [name] : value
+            //NombreCompleto : 'vaxi drez'
+        }))
     }
 
-    const subirFoto = imagenes => {
-        const foto = imagenes[0];
-        
-        obtenerDataImagen(foto).then((respuesta) => {
-            setImagenCurso(respuesta);
-        })
-
-    }
-
-    const guardarCursoBoton = e => {
+    const registrarSedeBoton =  e => {
         e.preventDefault();
-        const cursoId = uuidv4();
-
-        const objetoCurso = {
-            nombre : sede.nombre,
-            descripcion : sede.descripcion,
-            ubicacion: sede.ubicacion,
-            fechaPublicacion :  fechaSeleccionada,
-            sedeId : sedeId 
-        };
-
-        let objetoImagen = null;
-
-        if(imagenCurso){
-            objetoImagen = {
-                nombre : imagenCurso.nombre,
-                data : imagenCurso.data,
-                extension : imagenCurso.extension,
-                objetoReferencia : cursoId
-            };
-        }
         
-                
+        registrarSede(Sede).then(response => {
+            console.log('se registro exitosamente la sede', response);
+            window.localStorage.setItem("token_seguridad", response.data.token);
+        });
 
-        guardarSede(objetoSede, objetoImagen).then(respuestas => {
-            const responseSede = respuestas[0];
-            const responseImagen = respuestas[1];
-            let mensaje = "";
-
-            if(responseSede.status === 200) {
-                mensaje += "Se guardo exitosamente la sede"
-                resetearForm();
-            }else{
-                mensaje += "Errores :" + Object.keys(responseSede.data.errors);
-            }
-
-            if(responseImagen) {
-                if(responseImagen.status === 200){
-                    mensaje += ",Se guardo la imagen correctamente"
-                }else{
-                    mensaje += ",Errores en imagen:" + Object.keys(responseImagen.data.errors);
-                }
-            }
-            
-            dispatch({
-                type : "OPEN_SNACKBAR",
-                openMensaje : {
-                    open : true,
-                    mensaje : mensaje
-                }
-            })
-
-        })
     }
 
-
-    const fotoKey = uuidv4();
-
-    return (
+    return(
         <Container component="main" maxWidth="md" justify="center">
             <div style={style.paper}>
                 <Typography component="h1" variant="h5">
-                    Registro de Nueva Sede
+                    Registro de Sede
                 </Typography>
                 <form style={style.form}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={12}>
-                            <TextField 
-                                name="nombre"
-                                variant="outlined"
-                                fullWidth
-                                label="Ingrese Nombre"
-                                value = {sede.nombre}
-                                onChange = {ingresarValoresMemoria}
-                            />
+                        <Grid item xs={12} md={6}>
+                            <TextField name="estado" value={sede.estado} onChange={ingresarValoresMemoria} variant="outlined" fullWidth label="Estado de la sede" />
                         </Grid>
-                        <Grid item xs={12} md={12}>
-                            <TextField 
-                                name="descripcion"
-                                variant="outlined"
-                                fullWidth
-                                label = "Ingrese Descripcion"
-                                value = {curso.descripcion}
-                                onChange = {ingresarValoresMemoria}
-                            />
+                            <TextField name="nombre_sede" value={sede.nombre_sede} onChange={ingresarValoresMemoria} variant="outlined" fullWidth label="Ingrese nombre de la sede" />
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <TextField 
-                                name="ubicacion"
-                                variant="outlined"
-                                fullWidth
-                                label = "Ingrese ubicacion de la sede"
-                                value = {sede.ubicacion}
-                                onChange={ingresarValoresMemoria}
-                            />
+                            <TextField name="latitud" value={sede.latitud} onChange={ingresarValoresMemoria}  variant="outlined" fullWidth label="Ingrese su latitud" />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField name="longitud" value={sede.longitud} onChange={ingresarValoresMemoria} variant="outlined" fullWidth label="Ingrese su longitud" />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField name="ciudad" value={sede.ciudad} onChange={ingresarValoresMemoria} variant="outlined" fullWidth label="Ingrese la ciudad" />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <TextField name="usuario" value={sede.usuario} onChange={ingresarValoresMemoria} variant="outlined" fullWidth label="Ingrese su usuario" />
                         </Grid>
                         
-                        <Grid item xs={12} md={6}>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <KeyboardDatePicker 
-                                    value = {fechaSeleccionada}
-                                    onChange= {setFechaSeleccionada}
-                                    margin="normal"
-                                    id="fecha-publicacion-id"
-                                    label="Seleccione Fecha de Publicacion"
-                                    format="dd/MM/yyyy"
-                                    fullWidth
-                                    KeyboardButtonProps = {{
-                                        "aria-label" : "change date"
-                                    }}
-                                />
-                            </MuiPickersUtilsProvider>
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <ImageUploader 
-                                withIcon = {false}
-                                key = {fotoKey}
-                                singleImage = {true}
-                                buttonText = "Seleccion imagen del curso"
-                                onChange = {subirFoto}
-                                imgExtension = {[".jpg",".gif",".png","jpeg"]}
-                                maxFileSize = {5242880}
-                            />
-                        </Grid>
-
                     </Grid>
                     <Grid container justify="center">
                         <Grid item xs={12} md={6}>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                size="large"
-                                style={style.submit}
-                                onClick = {guardarSedeBoton}
-                            >
-                                Guardar nueva Sede
+                            <Button type="submit" onClick={registrarSedeBoton} fullWidth variant="contained" color="primary" size="large" style={style.submit}>
+                                Registrar
                             </Button>
                         </Grid>
                     </Grid>
@@ -196,6 +71,6 @@ const NuevaSede = () => {
             </div>
         </Container>
     );
-};
+}
 
 export default RegistrarSede;

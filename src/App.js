@@ -12,6 +12,7 @@ import { obtenerUsuarioActual } from "./actions/UsuarioAction";
 import RutaSegura from "./componentes/navegacion/RutaSegura";
 import NuevoCurso from "./componentes/cursos/NuevoCurso";
 import PaginadorCurso from "./componentes/cursos/PaginadorCurso";
+import RegistrarSedes from "./componentes/sedes/RegistrarSede";
 
 function App() {
   const [{ openSnackbar }, dispatch] = useStateValue();
@@ -73,11 +74,8 @@ function App() {
 
               <RutaSegura exact path="/curso/nuevo" component={NuevoCurso} />
 
-              <RutaSegura
-                exact
-                path="/curso/paginador"
-                component={PaginadorCurso}
-              />
+              <RutaSegura exact path="/sede/nuevo" component={RegistrarSede} />
+
             </Switch>
           </Grid>
         </MuithemeProvider>

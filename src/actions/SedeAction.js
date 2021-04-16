@@ -1,25 +1,34 @@
-import HttpCliente from '../servicios/HttpCliente';
+import HttpCliente from "../servicios/HttpCliente";
+import axios from "axios";
 
+const instancia = axios.create();
+instancia.CancelToken = axios.CancelToken;
+instancia.isCancel = axios.isCancel;
 
-export const guardarSede = async (sede, imagen) => {
-    const endPointCurso = '/sedes';
-    const promesaCurso = HttpCliente.post(endPointSede, sede);
-    
-    if(imagen){
-        const endPointImagen = '/documento';    
-        const promesaImagen = HttpCliente.post(endPointImagen, imagen);
-        return await Promise.all([promesaSede, promesaImagen]);
-    }else{
-        return await Promise.all([promesaSede]);
-    }
+export const registrarSede = (sede) => {
+  return new Promise((resolve, eject) => {
+    instancia.post("/sedes", sede).then((response) => {
+      resolve(response);
+    });
+  });
 };
 
+export const actualizarSede = (sede, dispatch) => {
+  return new Promise((resolve, eject) => {
+    HttpCliente.put("/sedes", sede)
+      .then((response) => {
+        dispatch({
+          type: "INICIAR_SESION",
+          sesion: response.data,
+          autenticado: true,
+        });
 
-export const paginacionSede = (paginador) => {
-    return new Promise((resolve, eject) => {
-        HttpCliente.post('/cursos/report', paginador).then(response => {
-            resolve(response);
-        })
-    })
-}
+        resolve(response);
+      })
+      .catch((error) => {
+        resolve(error.response);
+      });
+  });
+};
+
 
