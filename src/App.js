@@ -11,8 +11,8 @@ import { useStateValue } from "./contexto/store";
 import { obtenerUsuarioActual } from "./actions/UsuarioAction";
 import RutaSegura from "./componentes/navegacion/RutaSegura";
 import NuevoCurso from "./componentes/cursos/NuevoCurso";
-import PaginadorCurso from "./componentes/cursos/PaginadorCurso";
-import RegistrarSedes from "./componentes/sedes/RegistrarSede";
+import RegistrarSede from "./componentes/sedes/RegistrarSede";
+
 
 function App() {
   const [{ openSnackbar }, dispatch] = useStateValue();
@@ -73,7 +73,6 @@ function App() {
               <RutaSegura exact path="/" component={PerfilUsuario} />
 
               <RutaSegura exact path="/curso/nuevo" component={NuevoCurso} />
-
               <RutaSegura exact path="/sede/nuevo" component={RegistrarSede} />
 
             </Switch>

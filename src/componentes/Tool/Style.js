@@ -20,6 +20,9 @@ const style = {
     },
     icon : {
         fontSize : 40
+    },
+    esconder:{
+        display:"none"
     }
 };
 
