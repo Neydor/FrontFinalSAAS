@@ -124,7 +124,7 @@ const BarSesion = (props) => {
           <i className="material-icons">menu</i>
         </IconButton>
 
-        <Typography variant="h6">Cursos Online</Typography>
+        <Typography variant="h6">Sedursos</Typography>
         <div className={classes.grow}></div>
 
         <div className={classes.seccionDesktop}>
@@ -134,9 +134,7 @@ const BarSesion = (props) => {
           <Button color="inherit">
             {sesionUsuario ? sesionUsuario.usuario.primer_nombre : ""}
           </Button>
-          <Avatar
-            src={sesionUsuario.usuario.imagenPerfil || FotoUsuarioTemp}
-          ></Avatar>
+          <Avatar src="https://phantom-elmundo.unidadeditorial.es/4e8e03cd098f33bf049ca7ed33e609d0/resize/414/f/jpg/assets/multimedia/imagenes/2019/05/14/15578455293413.jpg"></Avatar>
         </div>
 
         <div className={classes.seccionMobile}>

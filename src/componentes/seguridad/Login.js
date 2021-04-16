@@ -32,17 +32,37 @@ const Login = (props) => {
     e.preventDefault();
     loginUsuario(usuario, dispatch).then((response) => {
       console.log("response.data.token", response);
-      if (response.status === 200) {
-        window.localStorage.setItem("token_seguridad", response.data.token);
-        props.history.push("/");
-      } else {
+      if (response === null) {
         dispatch({
           type: "OPEN_SNACKBAR",
           openMensaje: {
             open: true,
-            mensaje: "Las credenciales del usuario son incorrectas",
+            mensaje: "El servidor esta caido",
           },
         });
+      } else {
+        if (response.status === 200) {
+          if (response.data.auth) {
+            window.localStorage.setItem("token_seguridad", response.data.token);
+            props.history.push("/");
+          } else {
+            dispatch({
+              type: "OPEN_SNACKBAR",
+              openMensaje: {
+                open: true,
+                mensaje: "Las credenciales del usuario son incorrectas",
+              },
+            });
+          }
+        } else {
+          dispatch({
+            type: "OPEN_SNACKBAR",
+            openMensaje: {
+              open: true,
+              mensaje: "Las credenciales del usuario son incorrectas",
+            },
+          });
+        }
       }
     });
   };

@@ -15,21 +15,23 @@ import PaginadorCurso from "./componentes/cursos/PaginadorCurso";
 
 function App() {
   const [{ openSnackbar }, dispatch] = useStateValue();
-  
+
   const [iniciaApp, setIniciaApp] = useState(false);
 
   useEffect(() => {
     if (!iniciaApp) {
       obtenerUsuarioActual(dispatch)
         .then((response) => {
-          setIniciaApp(true);
+          console.log("IniciaAPP", response);
+          if (response) {
+            setIniciaApp(true);
+          }
         })
         .catch((error) => {
           setIniciaApp(true);
         });
     }
   }, [iniciaApp]);
- 
 
   return iniciaApp === false ? null : (
     <React.Fragment>
@@ -64,31 +66,18 @@ function App() {
                 path="/auth/registrar"
                 component={RegistrarUsuario}
               />
-              
-                <RutaSegura 
-                  exact
-                  path = "/auth/perfil"
-                  component = {PerfilUsuario}
-                />
-              
-              <RutaSegura 
-                exact
-                path="/"
-                component={PerfilUsuario}
-              />
+
+              <RutaSegura exact path="/auth/perfil" component={PerfilUsuario} />
+
+              <RutaSegura exact path="/" component={PerfilUsuario} />
+
+              <RutaSegura exact path="/curso/nuevo" component={NuevoCurso} />
 
               <RutaSegura
                 exact
-                path="/curso/nuevo"
-                component={NuevoCurso}
-              />
-
-              <RutaSegura 
-                exact
                 path="/curso/paginador"
-                component = {PaginadorCurso}
+                component={PaginadorCurso}
               />
-
             </Switch>
           </Grid>
         </MuithemeProvider>

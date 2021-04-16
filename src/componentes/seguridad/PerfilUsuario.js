@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import style from "../Tool/Style";
-import {
-  Container,
-  Typography,
-  Grid,
-  TextField,
-  Button,
-  Avatar,
-} from "@material-ui/core";
+import { Container } from "@material-ui/core";
 import {
   obtenerUsuarioActual,
   actualizarUsuario,
@@ -17,6 +10,21 @@ import reactFoto from "../../logo.svg";
 import { v4 as uuidv4 } from "uuid";
 import ImageUploader from "react-images-upload";
 import { obtenerDataImagen } from "../../actions/ImagenAction";
+import univalleLogo from "../../assets/univalle.jpg";
+import "leaflet/dist/leaflet.css";
+import { MapContainer, Map, TileLayer, Marker, Popup } from "react-leaflet";
+import L from "leaflet";
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import iconRetina from "leaflet/dist/images/marker-icon-2x.png";
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: iconRetina,
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+});
 
 const PerfilUsuario = () => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -47,55 +55,54 @@ const PerfilUsuario = () => {
     }));
   }, []);
 
-  const guardarUsuario = (e) => {
-    e.preventDefault();
-    console.log("usuario beofre send", usuario);
-    actualizarUsuario(usuario, dispatch).then((response) => {
-      if (response.status === 200) {
-        dispatch({
-          type: "OPEN_SNACKBAR",
-          openMensaje: {
-            open: true,
-            mensaje: "Se guardaron exitosamente los cambios en Perfil Usuario",
-          },
-        });
-        window.localStorage.setItem("token_seguridad", response.data.token);
-      } else {
-        dispatch({
-          type: "OPEN_SNACKBAR",
-          openMensaje: {
-            open: true,
-            mensaje:
-              "Errores al intentar guardar en : " +
-              Object.keys(response.data.errors),
-          },
-        });
-      }
-    });
-  };
-
-  const subirFoto = (imagenes) => {
-    const foto = imagenes[0];
-    const fotoUrl = URL.createObjectURL(foto);
-
-    obtenerDataImagen(foto).then((respuesta) => {
-      setUsuario((anterior) => ({
-        ...anterior,
-        imagenPerfil: respuesta, //respuesta es un json que proviene del action obtener imagen { data : ..., nombre:...,extension:... }
-        fotoUrl: fotoUrl, // el archivo en formato url
-      }));
-    });
-  };
-
-  const fotoKey = uuidv4();
+  const posicionTulua = [4.09098, -76.196281];
+  const listaGasolinerasCoordenada = [
+    [4.08654, -76.20139],
+    [4.06028, -76.19903],
+    [4.06028, -76.19903],
+    [4.08413, -76.19456],
+    [4.08782, -76.21574],
+    [4.07042, -76.19759],
+    [4.08441, -76.20173],
+    [4.10181, -76.1932],
+    [4.09192, -76.17874],
+    [4.09234, -76.17843],
+    [4.08418, -76.18639],
+    [4.07668, -76.18924],
+    [4.0699, -76.193],
+    [4.06521, -76.19667],
+    [4.06926, -76.19722],
+    [4.08968, -76.19186],
+    [4.08985, -76.19155],
+  ];
+  const styleMap = { width: "100%", height: "700px" };
 
   return (
     <Container component="main" maxWidth="md" justify="center">
-      <div style={style.paper}>
-        <Avatar style={style.avatar} src={usuario.fotoUrl || reactFoto} />
-        <Typography component="h1" variant="h5">
-          Perfil de Usuario
-        </Typography>
+      <div style={style.paper}></div>
+      <div>
+        <MapContainer
+          style={styleMap}
+          center={posicionTulua}
+          zoom={13}
+          scrollWheelZoom={false}
+        >
+          <TileLayer
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {listaGasolinerasCoordenada.map((cord) => (
+            <Marker position={[cord[0], cord[1]]}>
+              <Popup minWidth={90}>
+                Estacion: Tales <br />
+                Direccion:xxxxxx <br />
+                Telefono:asdss <br />
+                Latitud: {cord[0]} <br />
+                Longitud: {cord[1]} <br />
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
       </div>
     </Container>
   );

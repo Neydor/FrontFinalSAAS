@@ -17,19 +17,14 @@ export const obtenerUsuarioActual = (dispatch) => {
   return new Promise((resolve, eject) => {
     HttpCliente.get("/login")
       .then((response) => {
-        console.log("response", response);
-        if (response.data && response.data.imagenPerfil) {
-          let fotoPerfil = response.data.imagenPerfil;
-          const nuevoFile =
-            "data:image/" + fotoPerfil.extension + ";base64," + fotoPerfil.data;
-          response.data.imagenPerfil = nuevoFile;
+        console.log("reponse del GET", response);
+        if (response.data.loggedIn) {
+          dispatch({
+            type: "INICIAR_SESION",
+            sesion: response.data,
+            autenticado: true,
+          });
         }
-
-        dispatch({
-          type: "INICIAR_SESION",
-          sesion: response.data,
-          autenticado: true,
-        });
         resolve(response);
       })
       .catch((error) => {
@@ -44,13 +39,6 @@ export const actualizarUsuario = (usuario, dispatch) => {
   return new Promise((resolve, eject) => {
     HttpCliente.put("/login", usuario)
       .then((response) => {
-        if (response.data && response.data.imagenPerfil) {
-          let fotoPerfil = response.data.imagenPerfil;
-          const nuevoFile =
-            "data:image/" + fotoPerfil.extension + ";base64," + fotoPerfil.data;
-          response.data.imagenPerfil = nuevoFile;
-        }
-
         dispatch({
           type: "INICIAR_SESION",
           sesion: response.data,
@@ -70,12 +58,14 @@ export const loginUsuario = (usuario, dispatch) => {
     instancia
       .post("/login", usuario)
       .then((response) => {
-        dispatch({
-          type: "INICIAR_SESION",
-          sesion: response.data,
-          autenticado: true,
-        });
-
+        console.log("el dispatch", response);
+        if (response.data.auth) {
+          dispatch({
+            type: "INICIAR_SESION",
+            sesion: response.data.result,
+            autenticado: true,
+          });
+        }
         resolve(response);
       })
       .catch((error) => {
