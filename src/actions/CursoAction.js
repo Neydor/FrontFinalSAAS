@@ -16,3 +16,19 @@ export const paginacionCurso = (paginador) => {
     })
 }
 
+export const consultarCurso = (id) => {
+    return new Promise((resolve, eject) => {
+      
+      instancia.get(`/cursos/:id_curso${id}`).then((response) => {
+        resolve(response);
+      });
+    });
+  }
+  export const actualizarCurso = (id, curso) => {
+    return new Promise((resolve, eject) => {
+      console.log("entro a actualizarCurso")
+      instancia.put(`/cursos/:id_curso${id}`, curso).then((response) => {
+        resolve(response);
+      })
+    });
+  };
