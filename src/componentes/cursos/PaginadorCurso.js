@@ -20,11 +20,7 @@ const PaginadorCurso = () => {
   const [textoBusquedaCurso, setTextoBusquedaCurso] = useState("");
   const typingBuscadorTexto = ControlTyping(textoBusquedaCurso, 900);
 
-  const [paginadorRequest, setPaginadorRequest] = useState({
-    titulo: "",
-    numeroPagina: 0,
-    cantidadElementos: 5,
-  });
+  const [paginadorRequest, setPaginadorRequest] = useState();
 
   const [paginadorResponse, setPaginadorResponse] = useState({
     listaRecords: [],
@@ -38,21 +34,11 @@ const PaginadorCurso = () => {
 
     const obtenerListaCurso = async () => {
 
-      let tituloVariant = "";
-      let paginaVariant = paginadorRequest.numeroPagina + 1;
-
-      if(typingBuscadorTexto){
-        tituloVariant = typingBuscadorTexto;
-        paginaVariant = 1
-      }
-
       const objetoPaginadorRequest = {
-        titulo: tituloVariant,
-        numeroPagina: paginaVariant,
-        cantidadElementos: paginadorRequest.cantidadElementos,
       };
 
       const response = await paginacionCurso(objetoPaginadorRequest);
+      console.log(response)
       setPaginadorResponse(response.data);
     };
 
@@ -125,8 +111,6 @@ const PaginadorCurso = () => {
         component="div"
         rowsPerPageOptions={[5, 10, 25]}
         count={paginadorResponse.totalRecords}
-        rowsPerPage={paginadorRequest.cantidadElementos}
-        page={paginadorRequest.numeroPagina}
         onChangePage={cambiarPagina}
         onChangeRowsPerPage={cambiarCantidadRecords}
         labelRowsPerPage="Cursos por pagina"
