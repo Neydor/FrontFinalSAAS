@@ -13,6 +13,13 @@ export const registrarSede = (sede) => {
   });
 };
 
+export const consultarSede = (id) => {
+    return new Promise((resolve, eject) => {
+        instancia.post('/Curso/:id_curso', id).then((response) => {
+          resolve(response);
+        });
+      });
+}
 export const actualizarSede = (sede, dispatch) => {
   return new Promise((resolve, eject) => {
     HttpCliente.put("/sedes", sede)

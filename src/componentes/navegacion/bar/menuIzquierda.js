@@ -1,5 +1,6 @@
 import React from 'react';
 import { List, ListItem, ListItemText, Divider } from '@material-ui/core';
+import EditSharpIcon from '@material-ui/icons/EditSharpIcon';
 import { Link } from 'react-router-dom';
 
 export const MenuIzquierda = ({classes}) => (
@@ -20,16 +21,20 @@ export const MenuIzquierda = ({classes}) => (
                 <i className="material-icons">menu_book</i>
                 <ListItemText classes={{primary: classes.listItemText}} primary ="Lista Cursos" />
             </ListItem>
+            <ListItem component={Link} button to="/curso/paginador">
+                <i className="material-icons">EditSharpIcon</i>
+                <ListItemText classes={{primary: classes.listItemText}} primary ="Editar Curso"/>
+            </ListItem>
         </List>
         <Divider />
         <List>
             <ListItem component={Link} button  to="/sede/nuevo">
                  <i className="material-icons">person_add</i>
-                 <ListItemText classes={{primary: classes.listItemText}} primary="Nueva sede" />
+                 <ListItemText classes={{primary: classes.listItemText}} primary="Nueva sede"/>
             </ListItem>
-            <ListItem component={Link} button to="/instructor/lista">
-                <i className="material-icons">people</i>
-                <ListItemText classes={{primary: classes.listItemText}} primary="Lista Instructor"/>
+            <ListItem component={Link} button  to="/sede/nuevo">
+                 <i className="material-icons">EditSharpIcon</i>
+                 <ListItemText classes={{primary: classes.listItemText}} primary="Editar Sede"/>
             </ListItem>
         </List>
     </div>
