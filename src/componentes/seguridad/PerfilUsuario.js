@@ -24,11 +24,28 @@ L.Icon.Default.mergeOptions({
 
 const PerfilUsuario = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [sedes, setSedes] = useState({
-    data:[],
-    lenght:0
-  });
-  console.log(sedes);
+  const [sedes, setSedes] = useState([{
+    estado: 0,
+    id_ciudad: 0,
+    id_sede: 0,
+    id_usuario: 0,
+    latitud: 0.0,
+    longitud: 0.0,
+    nombre_sede: "",
+    t001_usuarios_id_usuario: 0
+}]);
+  
+  useEffect(() => {
+    console.log("Entra a useEffect home")
+    allSedes().then(response => {
+        console.log("Respuesta consulta SedesAll", response.data)
+        // var respuesta = response.data;
+        // respuesta.estado = String(respuesta.estado);
+        // respuesta.id_ciudad = String(respuesta.id_ciudad);
+        setSedes(response.data)
+        console.log(sedes)
+    })
+}, [])
     
   // useEffect(()=>{
   //   allSedes().then(response => {
@@ -40,25 +57,25 @@ const PerfilUsuario = (props) => {
   // })
 
   const posicionTulua = [4.09098, -76.196281];
-  const listaGasolinerasCoordenada = [
-    [4.08654, -76.20139],
-    [4.06028, -76.19903],
-    [4.06028, -76.19903],
-    [4.08413, -76.19456],
-    [4.08782, -76.21574],
-    [4.07042, -76.19759],
-    [4.08441, -76.20173],
-    [4.10181, -76.1932],
-    [4.09192, -76.17874],
-    [4.09234, -76.17843],
-    [4.08418, -76.18639],
-    [4.07668, -76.18924],
-    [4.0699, -76.193],
-    [4.06521, -76.19667],
-    [4.06926, -76.19722],
-    [4.08968, -76.19186],
-    [4.08985, -76.19155],
-  ];
+  // const listaGasolinerasCoordenada = [
+  //   [4.08654, -76.20139],
+  //   [4.06028, -76.19903],
+  //   [4.06028, -76.19903],
+  //   [4.08413, -76.19456],
+  //   [4.08782, -76.21574],
+  //   [4.07042, -76.19759],
+  //   [4.08441, -76.20173],
+  //   [4.10181, -76.1932],
+  //   [4.09192, -76.17874],
+  //   [4.09234, -76.17843],
+  //   [4.08418, -76.18639],
+  //   [4.07668, -76.18924],
+  //   [4.0699, -76.193],
+  //   [4.06521, -76.19667],
+  //   [4.06926, -76.19722],
+  //   [4.08968, -76.19186],
+  //   [4.08985, -76.19155],
+  // ];
   const styleMap = { width: "100%", height: "700px" };
 
   return (
@@ -75,14 +92,13 @@ const PerfilUsuario = (props) => {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {sedes.data.map((cord) => (
-            <Marker position={[cord[0], cord[1]]}>
+          {sedes.map((cord) => (
+            <Marker position={[cord.latitud, cord.longitud]}>
               <Popup minWidth={90}>
-                Estacion: Tales <br />
-                Direccion:xxxxxx <br />
-                Telefono:asdss <br />
-                Latitud: {cord[0]} <br />
-                Longitud: {cord[1]} <br />
+                Estacion: {cord.nombre_sede} <br />
+                Ciudad:{cord.id_ciudad} <br />
+                Latitud: {cord.latitud} <br />
+                Longitud: {cord.longitud} <br />
               </Popup>
             </Marker>
           ))}
